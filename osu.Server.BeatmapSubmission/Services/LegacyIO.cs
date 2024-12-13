@@ -38,6 +38,7 @@ namespace osu.Server.BeatmapSubmission.Services
                     Headers =
                     {
                         { "X-LIO-Signature", signature },
+                        { "X-API-Version", DateTimeOffset.Now.ToString("yyyyMMdd") },
                         { "Accept", "application/json" },
                     },
                 };
@@ -91,6 +92,9 @@ namespace osu.Server.BeatmapSubmission.Services
 
         public async Task BroadcastNewBeatmapSetEventAsync(uint beatmapSetId)
             => await runLegacyIO(HttpMethod.Post, $"beatmapsets/{beatmapSetId}/broadcast-new");
+
+        public async Task BroadcastUpdateBeatmapSetEventAsync(uint beatmapSetId, uint userId)
+            => await runLegacyIO(HttpMethod.Post, $"beatmapsets/{beatmapSetId}/broadcast-update", new { user_id = userId });
 
         public async Task IndexBeatmapSetAsync(uint beatmapSetId)
             => await runLegacyIO(HttpMethod.Post, $"index-beatmapset/{beatmapSetId}");
